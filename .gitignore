@@ -1,0 +1,39 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+node_modules/
+
+# 빌드 아티팩트
+dist/
+build/
+
+# Vite, Next.js 등 프레임워크가 생성하는 캐시
+.vite/
+.next/
+
+# 로그 파일
+*.log
+
+# 에디터 설정
+.vscode/

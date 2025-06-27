@@ -1,0 +1,9 @@
+.sortable-list {
+    border: 2px dashed #417cff; /* 점선 테두리로 드롭 가능한 영역 표시 */
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.sortable-list:hover {
+    background-color: #f0f8ff; /* 드래그 중일 때 배경색 변화 */
+}
