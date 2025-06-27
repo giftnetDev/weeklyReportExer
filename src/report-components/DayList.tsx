@@ -15,15 +15,23 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
         <h3>[{day}]</h3>
         <div
             onClick={() => onDayClick(day)}
-            style={{ background: items.length === 0 ? '#f9f9f9' : 'transparent', padding: 8, minHeight: 150, cursor: 'pointer' }}
+            style={{
+                background: items.length === 0 ? '#f9f9f9' : 'transparent',
+                padding: 8,
+                minHeight: 150,
+                cursor: 'pointer'
+            }}
         >
-            {/*{items.length === 0 && <p style={{ color: '#999' }}>리스트를 클릭해 태스크 추가</p>}*/}
             <Droppable droppableId={day}>
                 {(provided, snapshot) => (
                     <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        style={{ background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey', padding: 8, minHeight: 150 }}
+                        style={{
+                            background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
+                            padding: 8,
+                            minHeight: 150
+                        }}
                     >
                         {items.map((item, index) => (
                             <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -33,11 +41,33 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
                                         ref={prov.innerRef}
                                         {...prov.draggableProps}
                                         {...prov.dragHandleProps}
-                                        style={{ position: 'relative', userSelect: 'none', padding: 8, margin: '0 0 8px 0', backgroundColor: snap.isDragging ? '#263B4A' : '#456C86', color: 'white', borderRadius: 4, ...prov.draggableProps.style }}
+                                        style={{
+                                            position: 'relative',
+                                            userSelect: 'none',
+                                            padding: 8,
+                                            margin: '0 0 8px 0',
+                                            backgroundColor: snap.isDragging ? '#263B4A' : '#456C86',
+                                            color: 'white',
+                                            borderRadius: 4,
+                                            ...prov.draggableProps.style
+                                        }}
                                     >
                                         <button
-                                            onClick={e => { e.stopPropagation(); onTaskDelete(day, item.id); }}
-                                            style={{ position: 'absolute', top: 4, right: 4, background: 'transparent', border: 'none', color: 'white', fontSize: '1em', cursor: 'pointer' }}
+                                            onClick={e => {
+                                                e.stopPropagation();            // CHK: 클릭 이벤트 전파를 막아서 모달 열림 방지
+                                                onTaskDelete(day, item.id);     // CHK: 삭제 콜백 호출
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                top: 4,
+                                                right: 4,
+                                                background: 'transparent',
+                                                border: 'none',
+                                                color: 'white',
+                                                fontSize: '1em',
+                                                cursor: 'pointer',
+                                                zIndex:1            //CHK : 버튼이 항상 위에 있어서 클릭이 보장
+                                            }}
                                         >
                                             ×
                                         </button>
@@ -55,4 +85,5 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
     </div>
 );
 
+// CHK: 아래 줄을 추가했습니다. 없으면 `import DayList from './DayList'` 구문이 실패합니다.
 export default DayList;

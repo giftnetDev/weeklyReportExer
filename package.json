@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
+    "framer-motion": "^12.19.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-sortablejs": "^6.1.4",

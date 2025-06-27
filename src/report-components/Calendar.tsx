@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DragDropContext } from '@hello-pangea/dnd';
 import type { DropResult } from '@hello-pangea/dnd';
-import DayList from './DayList';
+import DayList from "./DayList.tsx";
 import TaskModal from './TaskModal';
 import type { DayTaskData } from './DayTask';
 
