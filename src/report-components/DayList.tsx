@@ -5,21 +5,35 @@ import type { DayTaskData } from './DayTask';
 export interface DayListProps {
     day: string;
     items: DayTaskData[];
+    isDragging: boolean;
     onDayClick: (day: string) => void;
     onTaskClick: (day: string, task: DayTaskData) => void;
     onTaskDelete: (day: string, taskId: string) => void;
 }
 
-const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, onTaskDelete }) => (
+const DayList: React.FC<DayListProps> = ({
+                                             day,
+                                             items,
+                                             isDragging,
+                                             onDayClick,
+                                             onTaskClick,
+                                             onTaskDelete,
+                                         }) => (
     <div style={{ width: '200px', margin: '8px' }}>
         <h3>[{day}]</h3>
         <div
-            onClick={() => onDayClick(day)}
+            onClick={e => {
+                if (isDragging) {
+                    e.stopPropagation();
+                    return;
+                }
+                onDayClick(day);
+            }}
             style={{
                 background: items.length === 0 ? '#f9f9f9' : 'transparent',
                 padding: 8,
                 minHeight: 150,
-                cursor: 'pointer'
+                cursor: 'pointer',
             }}
         >
             <Droppable droppableId={day}>
@@ -30,14 +44,17 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
                         style={{
                             background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
                             padding: 8,
-                            minHeight: 150
+                            minHeight: 150,
                         }}
                     >
                         {items.map((item, index) => (
                             <Draggable key={item.id} draggableId={item.id} index={index}>
                                 {(prov, snap) => (
                                     <div
-                                        onClick={e => { e.stopPropagation(); onTaskClick(day, item); }}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            onTaskClick(day, item);
+                                        }}
                                         ref={prov.innerRef}
                                         {...prov.draggableProps}
                                         {...prov.dragHandleProps}
@@ -49,13 +66,13 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
                                             backgroundColor: snap.isDragging ? '#263B4A' : '#456C86',
                                             color: 'white',
                                             borderRadius: 4,
-                                            ...prov.draggableProps.style
+                                            ...prov.draggableProps.style,
                                         }}
                                     >
                                         <button
                                             onClick={e => {
-                                                e.stopPropagation();            // CHK: 클릭 이벤트 전파를 막아서 모달 열림 방지
-                                                onTaskDelete(day, item.id);     // CHK: 삭제 콜백 호출
+                                                e.stopPropagation();
+                                                onTaskDelete(day, item.id);
                                             }}
                                             style={{
                                                 position: 'absolute',
@@ -66,11 +83,12 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
                                                 color: 'white',
                                                 fontSize: '1em',
                                                 cursor: 'pointer',
-                                                zIndex:1            //CHK : 버튼이 항상 위에 있어서 클릭이 보장
+                                                zIndex: 1,
                                             }}
                                         >
                                             ×
                                         </button>
+
                                         {item.title && <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{item.title}</div>}
                                         {item.memo && <div style={{ fontSize: '0.9em', opacity: 0.85 }}>{item.memo}</div>}
                                     </div>
@@ -85,5 +103,4 @@ const DayList: React.FC<DayListProps> = ({ day, items, onDayClick, onTaskClick, 
     </div>
 );
 
-// CHK: 아래 줄을 추가했습니다. 없으면 `import DayList from './DayList'` 구문이 실패합니다.
 export default DayList;
