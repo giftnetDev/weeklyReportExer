@@ -1,6 +1,7 @@
 import React from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import type { DayTaskData } from './DayTask';
+import DayTask from './DayTask';
 
 export interface DayListProps {
     day: string;
@@ -50,48 +51,18 @@ const DayList: React.FC<DayListProps> = ({
                         {items.map((item, index) => (
                             <Draggable key={item.id} draggableId={item.id} index={index}>
                                 {(prov, snap) => (
-                                    <div
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            onTaskClick(day, item);
-                                        }}
+                                    <DayTask
+                                        // CHK: 이제 handle props를 객체로 전달합니다
                                         ref={prov.innerRef}
-                                        {...prov.draggableProps}
-                                        {...prov.dragHandleProps}
-                                        style={{
-                                            position: 'relative',
-                                            userSelect: 'none',
-                                            padding: 8,
-                                            margin: '0 0 8px 0',
-                                            backgroundColor: snap.isDragging ? '#263B4A' : '#456C86',
-                                            color: 'white',
-                                            borderRadius: 4,
-                                            ...prov.draggableProps.style,
-                                        }}
-                                    >
-                                        <button
-                                            onClick={e => {
-                                                e.stopPropagation();
-                                                onTaskDelete(day, item.id);
-                                            }}
-                                            style={{
-                                                position: 'absolute',
-                                                top: 4,
-                                                right: 4,
-                                                background: 'transparent',
-                                                border: 'none',
-                                                color: 'white',
-                                                fontSize: '1em',
-                                                cursor: 'pointer',
-                                                zIndex: 1,
-                                            }}
-                                        >
-                                            ×
-                                        </button>
+                                        draggableProps={prov.draggableProps}
+                                        dragHandleProps={prov.dragHandleProps!}
+                                        isDragging={snap.isDragging}
 
-                                        {item.title && <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{item.title}</div>}
-                                        {item.memo && <div style={{ fontSize: '0.9em', opacity: 0.85 }}>{item.memo}</div>}
-                                    </div>
+                                        // task data & event handlers
+                                        data={item}
+                                        onClick={() => onTaskClick(day, item)}
+                                        onDelete={id => onTaskDelete(day, id)}
+                                    />
                                 )}
                             </Draggable>
                         ))}
